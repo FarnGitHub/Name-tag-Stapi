@@ -1,4 +1,4 @@
-## Farn's Name tag StationAPI
+# Farn's Name tag StationAPI
 
 Add Name tag to beta 1.7.3 (it doesn't work the same as modern minecraft, however)
 
