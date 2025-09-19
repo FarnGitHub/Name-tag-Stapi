@@ -64,10 +64,12 @@ public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<U
 
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler handler) {
-        ClientWorld world = (ClientWorld) ((Minecraft) FabricLoader.getInstance().getGameInstance()).world;
-        LivingEntity entity = (LivingEntity) world.getEntity(entityId);
-        if (entity instanceof EntityNameTag tagEntity) {
-            tagEntity.farn_setEntityName(name);
+        if(((Minecraft) FabricLoader.getInstance().getGameInstance()).world instanceof ClientWorld) {
+            ClientWorld world = (ClientWorld) ((Minecraft) FabricLoader.getInstance().getGameInstance()).world;
+            LivingEntity entity = (LivingEntity) world.getEntity(entityId);
+            if (entity instanceof EntityNameTag tagEntity) {
+                tagEntity.farn_setEntityName(name);
+            }
         }
     }
 

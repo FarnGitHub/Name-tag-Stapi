@@ -4,6 +4,7 @@ import farn.nametag.other.EntityNameTag;
 import farn.nametag.packet.UpdateClientNameTagPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -32,7 +33,11 @@ public class LivingEntityMixin implements EntityNameTag {
         if(!(self instanceof PlayerEntity)) {
             nbt.putString("farnEntityName", (String)this.farn_EntityName);
             farn_canDespawn = !farn_hasEntityName();
-            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+                PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
+            } else {
+
+            }
         }
     }
 
@@ -41,7 +46,11 @@ public class LivingEntityMixin implements EntityNameTag {
         if(!(self instanceof PlayerEntity)) {
             farn_setEntityName(nbt.getString("farnEntityName"));
             farn_canDespawn = !farn_hasEntityName();
-            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+                PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
+            } else {
+
+            }
         }
     }
 
@@ -61,7 +70,11 @@ public class LivingEntityMixin implements EntityNameTag {
     @Override
     public void farn_setEntityName(String string) {
         farn_EntityName = string;
-        PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, string));
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, string));
+        } else {
+
+        }
     }
 
     @Inject(method = "canDespawn", at =@At("HEAD"), cancellable = true)
