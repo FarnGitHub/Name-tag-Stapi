@@ -1,5 +1,7 @@
 package farn.nametag.packet;
 
+import farn.nametag.other.NameTagItem;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -61,7 +63,6 @@ public class ChangeNameTagServerPacket extends Packet
 
     @Override
     public void apply(NetworkHandler handler) {
-        // Run correct version depending on logical side
         SideUtil.run(
                 () -> handleClient(handler),
                 () -> handleServer(handler)
@@ -70,17 +71,14 @@ public class ChangeNameTagServerPacket extends Packet
 
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler handler) {
-        // Usually you don’t need to modify stacks client-side,
-        // but you could update the GUI preview here if needed.
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(handler);
-        player.sendMessage("Received NameTagUpdate on client: " + tag);
     }
 
     @Environment(EnvType.SERVER)
     public void handleServer(NetworkHandler handler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(handler);
         ItemStack stack = player.inventory.getStack(slot);
-        if (stack != null) {
+        if (stack != null && stack.getItem() instanceof NameTagItem) {
             NbtCompound nbt = new NbtCompound();
             nbt.putString("nameTag", tag);
             StationNBTSetter.cast(stack).setStationNbt(nbt);

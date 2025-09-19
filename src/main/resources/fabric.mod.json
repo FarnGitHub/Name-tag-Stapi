@@ -17,7 +17,10 @@
       "farn.nametag.NameTagMain"
     ],
     "stationapi:event_bus_client": [
-      "farn.nametag.other.NameTagTexture"
+      "farn.nametag.other.listener.NameTagTexture"
+    ],
+    "stationapi:event_bus_server": [
+      "farn.nametag.other.listener.NameTagServerTracker"
     ]
   },
   "mixins": [

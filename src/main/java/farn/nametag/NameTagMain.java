@@ -42,9 +42,7 @@ public class NameTagMain {
         RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
 
         if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
-            CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), " w ", " o ", " o ", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
-            CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), "w  ", "o  ", "o  ", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
-            CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), "  w", "  o", "  o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
+            CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
         }
     }
 

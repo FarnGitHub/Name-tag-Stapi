@@ -1,5 +1,7 @@
 package farn.nametag.other;
 
+import farn.nametag.NameTagMain;
+import farn.nametag.packet.UpdateClientNameTagPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -12,6 +14,7 @@ import net.minecraft.util.hit.HitResultType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.item.StationItemNbt;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.NotNull;

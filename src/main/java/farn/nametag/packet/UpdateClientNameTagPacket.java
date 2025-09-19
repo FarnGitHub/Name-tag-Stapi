@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<UpdateClientNameTagPacket> {
     public static final PacketType<UpdateClientNameTagPacket> TYPE =
-            PacketType.builder(true, false, UpdateClientNameTagPacket::new).build();
+            PacketType.builder(true, true, UpdateClientNameTagPacket::new).build();
 
     public int entityId;
     public String name;
@@ -68,7 +68,6 @@ public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<U
         LivingEntity entity = (LivingEntity) world.getEntity(entityId);
         if (entity instanceof EntityNameTag tagEntity) {
             tagEntity.farn_setEntityName(name);
-            NameTagMain.LOGGER.info("SUCESS");
         }
     }
 
