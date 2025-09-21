@@ -1,7 +1,6 @@
 package farn.nametag.other;
 
 import farn.nametag.NameTagMain;
-import farn.nametag.packet.UpdateClientNameTagPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,7 +13,6 @@ import net.minecraft.util.hit.HitResultType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.item.StationItemNbt;
-import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +21,11 @@ public class NameTagItem extends TemplateItem implements StationItemNbt, CustomT
 
     public NameTagItem(Identifier identifier) {
         super(identifier);
-        this.maxCount = 1;
     }
 
     public void useOnEntity(ItemStack stack, LivingEntity entity) {
-        if(entity.world.isRemote) return;
-        ((EntityNameTag)entity).farn_setEntityName(stack.getStationNbt().getString("nameTag"));
+        if(entity.world.isRemote || entity instanceof PlayerEntity) return;
+        ((EntityNameTag)entity).farn_setEntityName(stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY));
     }
 
     @Environment(EnvType.CLIENT)
@@ -43,17 +40,21 @@ public class NameTagItem extends TemplateItem implements StationItemNbt, CustomT
     @Override
     public NbtCompound getStationNbt() {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("nameTag", "Name Tag");
+        if(nbt.contains("nameTag")) {
+            nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nbt.getString("nameTag"));
+        } else {
+            nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, "missingno");
+        }
         return nbt;
     }
 
     @Override
     public @NotNull String[] getTooltip(ItemStack stack, String originalTooltip) {
-        String nameTagName = stack.getStationNbt().getString("nameTag");
+        String nameTagName = stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
         if (nameTagName == null || nameTagName.isEmpty()) {
             return new String[]{originalTooltip};
         } else {
-            return new String[]{originalTooltip, "§o" + nameTagName + "§r"};
+            return new String[]{originalTooltip, "§7§o" + nameTagName + "§r"};
         }
     }
 

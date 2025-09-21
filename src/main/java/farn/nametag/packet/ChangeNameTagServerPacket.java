@@ -1,7 +1,7 @@
 package farn.nametag.packet;
 
+import farn.nametag.NameTagMain;
 import farn.nametag.other.NameTagItem;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -80,7 +80,7 @@ public class ChangeNameTagServerPacket extends Packet
         ItemStack stack = player.inventory.getStack(slot);
         if (stack != null && stack.getItem() instanceof NameTagItem) {
             NbtCompound nbt = new NbtCompound();
-            nbt.putString("nameTag", tag);
+            nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, tag);
             StationNBTSetter.cast(stack).setStationNbt(nbt);
         }
     }

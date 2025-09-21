@@ -26,6 +26,9 @@ public class NameTagMain {
 
     public static Item farn_Nametag;
 
+    public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
+    public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
+
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         farn_Nametag = new NameTagItem(NAMESPACE.id("farn_nametag")).setTranslationKey(NAMESPACE, "nametag");
@@ -44,6 +47,14 @@ public class NameTagMain {
         if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
             CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
         }
+    }
+
+    public static boolean NameTagHasName(ItemStack item) {
+        return item.getStationNbt().contains(NAMETAG_ITEM_NBT_KEY);
+    }
+
+    public static boolean itemHasNameTag(ItemStack item) {
+        return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
     }
 
 }

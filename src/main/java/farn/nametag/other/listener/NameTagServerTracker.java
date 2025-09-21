@@ -25,10 +25,7 @@ public class NameTagServerTracker {
     @EventListener
     public void trackEntity(TrackEntityEvent event) {
         if(event.entityToTrack instanceof LivingEntity && (!(event.entityToTrack instanceof PlayerEntity))) {
-            EntityNameTag entityNameTag = ((EntityNameTag)event.entityToTrack);
-            if(entityNameTag.farn_hasEntityName()) {
-                PacketHelper.sendToAllTracking(event.entityToTrack, new UpdateClientNameTagPacket(event.entityToTrack.id, entityNameTag.farn_getEntityName()));
-            }
+            ((EntityNameTag)event.entityToTrack).updateServerNameTag();
         }
 
     }

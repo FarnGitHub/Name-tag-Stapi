@@ -1,5 +1,6 @@
 package farn.nametag.other;
 
+import farn.nametag.NameTagMain;
 import farn.nametag.packet.ChangeNameTagServerPacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -45,7 +46,7 @@ public class NameTagChangerScreen extends Screen {
                     PacketHelper.send(new ChangeNameTagServerPacket(slot, nameTagTextbox.getText()));
                 } else {
                     NbtCompound nbt = new NbtCompound();
-                    nbt.putString("nameTag", nameTagTextbox.getText());
+                    nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
                     StationNBTSetter.cast(item).setStationNbt(nbt);
                 }
                 this.minecraft.setScreen(null);

@@ -17,7 +17,7 @@
       "farn.nametag.NameTagMain"
     ],
     "stationapi:event_bus_client": [
-      "farn.nametag.other.listener.NameTagTexture"
+      "farn.nametag.other.listener.NameTagClient"
     ],
     "stationapi:event_bus_server": [
       "farn.nametag.other.listener.NameTagServerTracker"

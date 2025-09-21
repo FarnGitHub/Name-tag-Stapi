@@ -11,4 +11,6 @@ public interface EntityNameTag {
     public abstract String farn_getEntityName();
 
     public abstract void farn_setEntityName(String string);
+
+    public abstract void updateServerNameTag();
 }

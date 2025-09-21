@@ -33,11 +33,7 @@ public class LivingEntityMixin implements EntityNameTag {
         if(!(self instanceof PlayerEntity)) {
             nbt.putString("farnEntityName", (String)this.farn_EntityName);
             farn_canDespawn = !farn_hasEntityName();
-            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
-                PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
-            } else {
-
-            }
+            updateServerNameTag();
         }
     }
 
@@ -46,11 +42,7 @@ public class LivingEntityMixin implements EntityNameTag {
         if(!(self instanceof PlayerEntity)) {
             farn_setEntityName(nbt.getString("farnEntityName"));
             farn_canDespawn = !farn_hasEntityName();
-            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
-                PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
-            } else {
-
-            }
+            updateServerNameTag();
         }
     }
 
@@ -70,15 +62,24 @@ public class LivingEntityMixin implements EntityNameTag {
     @Override
     public void farn_setEntityName(String string) {
         farn_EntityName = string;
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
-            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, string));
-        } else {
-
-        }
+        updateServerNameTag(string);
     }
 
     @Inject(method = "canDespawn", at =@At("HEAD"), cancellable = true)
     public void stopDespawnWhenHaveNameTag(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(farn_canDespawn);
+    }
+
+    @Override
+    public void updateServerNameTag() {
+        if(farn_hasEntityName() && FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, farn_getEntityName()));
+        }
+    }
+
+    private void updateServerNameTag(String string) {
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            PacketHelper.sendToAllTracking(self, new UpdateClientNameTagPacket(self.id, string));
+        }
     }
 }
