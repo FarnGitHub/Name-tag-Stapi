@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "farnnametag",
+  "version": "${version}",
+
+  "name": "Farn's Name Tag",
+  "description": "Add Name tag to the game (doesn't work the same as modern minecraft though)",
+  "authors": [
+    "farnfarn02"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/farnnametag/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "farn.nametag.NameTagMain"
+    ],
+    "stationapi:event_bus_client": [
+      "farn.nametag.other.listener.NameTagClient"
+    ],
+    "stationapi:event_bus_server": [
+      "farn.nametag.other.listener.NameTagServerTracker"
+    ],
+    "gcapi3": [
+      "farn.nametag.other.listener.NameTagConfig"
+    ]
+  },
+  "mixins": [
+    "farnnametag.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3",
+    "gcapi3": "*"
+  }
+}
