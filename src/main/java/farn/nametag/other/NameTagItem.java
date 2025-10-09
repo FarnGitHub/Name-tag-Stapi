@@ -64,7 +64,11 @@ public class NameTagItem extends TemplateItem implements StationItemNbt, CustomT
     }
 
     private static void useNameTag(LivingEntity ent, ItemStack stack) {
-        ((EntityNameTag)ent).nametag_setEntityNameTag(stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY));
+        EntityNameTag entityTag = ((EntityNameTag)ent);
+        if(entityTag.nametag_entityHasNameTag()) {
+            entityTag.nametag_AddTaggedNamedCount();
+        }
+        entityTag.nametag_setEntityNameTag(stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY));
         if(NameTagConfig.instance.consumeNameTag) {
             --stack.count;
         }

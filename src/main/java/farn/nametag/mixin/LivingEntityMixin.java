@@ -26,7 +26,7 @@ public class LivingEntityMixin implements EntityNameTag {
     private String farn_EntityName = "";
 
     @Unique
-    private int farn_taggedName = 0;
+    private int farn_taggedName = 1;
 
     private LivingEntity self = (LivingEntity)(Object)this;
 
@@ -83,7 +83,7 @@ public class LivingEntityMixin implements EntityNameTag {
 
     @Inject(method = "onKilledBy", at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/LivingEntity;dropItems()V"))
     public void nametag_DroppedNameTag(Entity par1, CallbackInfo ci) {
-        if(nametag_entityHasNameTag() && NameTagConfig.instance.consumeNameTag) {
+        if(NameTagConfig.instance.consumeNameTag && nametag_entityHasNameTag() && !self.world.isRemote) {
             ItemStack nameTag = new ItemStack(NameTagMain.farn_Nametag);
             nameTag.count = farn_taggedName;
             nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nametag_getEntityNameTag());

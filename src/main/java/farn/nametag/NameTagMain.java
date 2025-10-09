@@ -4,6 +4,8 @@ import farn.nametag.other.EntityNameTag;
 import farn.nametag.other.NameTagItem;
 import farn.nametag.packet.UpdateClientNameTagPacket;
 import farn.nametag.packet.ChangeNameTagServerPacket;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.Minecraft;
@@ -33,6 +35,7 @@ public class NameTagMain {
     public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
     public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
 
+    @Environment(EnvType.CLIENT)
     private static Minecraft mc;
 
     @EventListener
@@ -63,6 +66,7 @@ public class NameTagMain {
         return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
     }
 
+    @Environment(EnvType.CLIENT)
     public static Minecraft getMinecraftInstance() {
         if(mc == null) {
             mc = ((Minecraft) FabricLoader.getInstance().getGameInstance());
