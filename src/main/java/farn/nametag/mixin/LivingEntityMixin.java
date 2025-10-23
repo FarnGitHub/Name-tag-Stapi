@@ -5,12 +5,15 @@ import farn.nametag.other.EntityNameTag;
 import farn.nametag.other.listener.NameTagConfig;
 import farn.nametag.packet.UpdateClientNameTagPacket;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -82,13 +85,20 @@ public class LivingEntityMixin implements EntityNameTag {
     }
 
     @Inject(method = "onKilledBy", at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/LivingEntity;dropItems()V"))
-    public void nametag_DroppedNameTag(Entity par1, CallbackInfo ci) {
+    public void nametag_DroppedNameTag(CallbackInfo ci) {
         if(NameTagConfig.instance.consumeNameTag && nametag_entityHasNameTag() && !self.world.isRemote) {
             ItemStack nameTag = new ItemStack(NameTagMain.farn_Nametag);
             nameTag.count = farn_taggedName;
             nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nametag_getEntityNameTag());
-            self.dropItem(nameTag, 0);
+            ItemEntity entItem = self.dropItem(nameTag, 0.0F);
+            if(entItem != null) {
+
+            }
         }
+    }
+    @Environment(EnvType.SERVER)
+    private void nametag_LogServer(ItemEntity entItem) {
+        MinecraftServer.LOGGER.info(entItem.x + ", " + entItem.y + ", " +  entItem.z);
     }
 
     @Override
