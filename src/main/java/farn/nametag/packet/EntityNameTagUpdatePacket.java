@@ -1,13 +1,14 @@
 package farn.nametag.packet;
 
 import farn.nametag.other.EntityNameTag;
-import farn.nametag.NameTagMain;
+import farn.nametag.other.impl.Util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.ClientWorld;
+import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.SideUtil;
@@ -16,18 +17,18 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<UpdateClientNameTagPacket> {
-    public static final PacketType<UpdateClientNameTagPacket> TYPE =
-            PacketType.builder(true, true, UpdateClientNameTagPacket::new).build();
+public class EntityNameTagUpdatePacket extends Packet implements ManagedPacket<EntityNameTagUpdatePacket> {
+    public static final PacketType<EntityNameTagUpdatePacket> TYPE =
+            PacketType.builder(true, true, EntityNameTagUpdatePacket::new).build();
 
     public int entityId;
     public String name;
 
-    public UpdateClientNameTagPacket() {
+    public EntityNameTagUpdatePacket() {
 
     }
 
-    public UpdateClientNameTagPacket(int entityId, String name) {
+    public EntityNameTagUpdatePacket(int entityId, String name) {
         this.entityId = entityId;
         this.name = name;
     }
@@ -56,24 +57,18 @@ public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<U
     public void apply(NetworkHandler handler) {
         SideUtil.run(
                 () -> handleClient(handler),
-                () -> handleServer(handler)
+                () -> {}
         );
     }
 
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler handler) {
-        if(NameTagMain.getMinecraftInstance().world instanceof ClientWorld) {
-            ClientWorld world = (ClientWorld) NameTagMain.getMinecraftInstance().world;
+        if(Util.getMinecraftInstance().world instanceof ClientWorld world) {
             LivingEntity entity = (LivingEntity) world.getEntity(entityId);
             if (entity instanceof EntityNameTag tagEntity) {
                 tagEntity.nametag_setEntityNameTag(name);
             }
         }
-    }
-
-    @Environment(EnvType.SERVER)
-    public void handleServer(NetworkHandler handler) {
-
     }
 
     @Override
@@ -82,7 +77,7 @@ public class UpdateClientNameTagPacket extends Packet implements ManagedPacket<U
     }
 
     @Override
-    public PacketType<UpdateClientNameTagPacket> getType() {
+    public PacketType<EntityNameTagUpdatePacket> getType() {
         return TYPE;
     }
 }

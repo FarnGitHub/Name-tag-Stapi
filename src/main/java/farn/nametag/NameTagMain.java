@@ -2,22 +2,25 @@ package farn.nametag;
 
 import farn.nametag.other.EntityNameTag;
 import farn.nametag.other.NameTagItem;
-import farn.nametag.packet.UpdateClientNameTagPacket;
-import farn.nametag.packet.ChangeNameTagServerPacket;
+import farn.nametag.other.impl.Util;
+import farn.nametag.packet.EntityNameTagUpdatePacket;
+import farn.nametag.packet.RenameNameTagPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
+import net.mine_diver.unsafeevents.listener.ListenerPriority;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.client.event.gui.screen.container.TooltipBuildEvent;
+import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.recipe.CraftingRegistry;
 import net.modificationstation.stationapi.api.registry.PacketTypeRegistry;
 import net.modificationstation.stationapi.api.registry.Registry;
+import net.modificationstation.stationapi.api.server.event.entity.TrackEntityEvent;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -30,23 +33,16 @@ public class NameTagMain {
     @Entrypoint.Logger
     public static Logger LOGGER = Null.get();
 
-    public static Item farn_Nametag;
-
-    public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
-    public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
-
-    @Environment(EnvType.CLIENT)
-    private static Minecraft mc;
-
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
-        farn_Nametag = new NameTagItem(NAMESPACE.id("farn_nametag")).setTranslationKey(NAMESPACE, "nametag");
-        LOGGER.info(farn_Nametag.getTranslationKey());
+        Util.farn_Nametag = new NameTagItem(NAMESPACE.id("farn_nametag")).setTranslationKey(NAMESPACE, "nametag");
+        LOGGER.info(Util.farn_Nametag.getTranslationKey());
     }
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
-        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), ChangeNameTagServerPacket.TYPE);
-        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("entity_tag"), UpdateClientNameTagPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), RenameNameTagPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("entity_tag"), EntityNameTagUpdatePacket.TYPE);
+        Util.nameTagTrackingId = NAMESPACE.id("farn_nametag_name").hashCode();
     }
 
     @EventListener
@@ -54,25 +50,25 @@ public class NameTagMain {
         RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
 
         if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
-            CraftingRegistry.addShapedRecipe(new ItemStack(farn_Nametag), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
+            CraftingRegistry.addShapedRecipe(new ItemStack(Util.farn_Nametag), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
         }
-    }
-
-    public static boolean NameTagHasName(ItemStack item) {
-        return item.getStationNbt().contains(NAMETAG_ITEM_NBT_KEY);
-    }
-
-    public static boolean itemHasNameTag(ItemStack item) {
-        return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
     }
 
     @Environment(EnvType.CLIENT)
-    public static Minecraft getMinecraftInstance() {
-        if(mc == null) {
-            mc = ((Minecraft) FabricLoader.getInstance().getGameInstance());
-        }
+    @EventListener
+    public void registerTextures(TextureRegisterEvent event) {
+        Util.farn_Nametag.setTexture(NAMESPACE.id("item/name_tag"));
+    }
 
-        return mc;
+    @Environment(EnvType.CLIENT)
+    @EventListener(priority = ListenerPriority.HIGHEST)
+    public void customNameTooltip(TooltipBuildEvent event) {
+        if(!event.tooltip.isEmpty()) {
+            if(Util.itemHasNameTag(event.itemStack)) {
+                event.tooltip.set(0, event.itemStack.getStationNbt().getString(Util.CUSTOM_NAME_NBT_KEY));
+                event.add("§7§o" + event.itemStack.getItem().getTranslatedName() + "§r");
+            }
+        }
     }
 
 }

@@ -1,8 +1,7 @@
 package farn.nametag.packet;
 
-import farn.nametag.NameTagMain;
 import farn.nametag.other.NameTagItem;
-import farn.nametag.other.listener.NameTagConfig;
+import farn.nametag.other.impl.Util;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -20,19 +19,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ChangeNameTagServerPacket extends Packet
-        implements ManagedPacket<ChangeNameTagServerPacket> {
+public class RenameNameTagPacket extends Packet
+        implements ManagedPacket<RenameNameTagPacket> {
 
-    public static final PacketType<ChangeNameTagServerPacket> TYPE =
-            PacketType.builder(false, true, ChangeNameTagServerPacket::new).build();
+    public static final PacketType<RenameNameTagPacket> TYPE =
+            PacketType.builder(false, true, RenameNameTagPacket::new).build();
 
     public int slot;
     public String tag;
 
-    public ChangeNameTagServerPacket() {
+    public RenameNameTagPacket() {
     }
 
-    public ChangeNameTagServerPacket(int slot, String tag) {
+    public RenameNameTagPacket(int slot, String tag) {
         this.slot = slot;
         this.tag = tag;
     }
@@ -81,13 +80,13 @@ public class ChangeNameTagServerPacket extends Packet
         ItemStack stack = player.inventory.getStack(slot);
         if (stack != null && stack.getItem() instanceof NameTagItem) {
             NbtCompound nbt = new NbtCompound();
-            nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, tag);
+            nbt.putString(Util.NAMETAG_ITEM_NBT_KEY, tag);
             StationNBTSetter.cast(stack).setStationNbt(nbt);
         }
     }
 
     @Override
-    public PacketType<ChangeNameTagServerPacket> getType() {
+    public PacketType<RenameNameTagPacket> getType() {
         return TYPE;
     }
 }

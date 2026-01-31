@@ -8,7 +8,7 @@ public interface EntityNameTag {
 
     void nametag_setEntityNameTag(String string);
 
-    void nametag_updateClientNameTag();
-
     void nametag_AddTaggedNamedCount();
+
+    void nametag_updateClientNameTag();
 }

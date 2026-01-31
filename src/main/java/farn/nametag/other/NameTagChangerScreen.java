@@ -1,7 +1,7 @@
 package farn.nametag.other;
 
-import farn.nametag.NameTagMain;
-import farn.nametag.packet.ChangeNameTagServerPacket;
+import farn.nametag.other.impl.Util;
+import farn.nametag.packet.RenameNameTagPacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -22,7 +22,7 @@ public class NameTagChangerScreen extends Screen {
             this.minecraft.setScreen(null);
         } else {
             item = itemRaw;
-            originalString = item.getStationNbt().getString("nameTag");
+            originalString = item.getStationNbt().getString(Util.NAMETAG_ITEM_NBT_KEY);
         }
     }
 
@@ -43,10 +43,10 @@ public class NameTagChangerScreen extends Screen {
             if(nameTagTextbox.getText().length() > 0) {
                 int slot = minecraft.player.inventory.selectedSlot;
                 if(minecraft.isWorldRemote()) {
-                    PacketHelper.send(new ChangeNameTagServerPacket(slot, nameTagTextbox.getText()));
+                    PacketHelper.send(new RenameNameTagPacket(slot, nameTagTextbox.getText()));
                 } else {
                     NbtCompound nbt = new NbtCompound();
-                    nbt.putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
+                    nbt.putString(Util.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
                     StationNBTSetter.cast(item).setStationNbt(nbt);
                 }
                 this.minecraft.setScreen(null);

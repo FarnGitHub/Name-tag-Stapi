@@ -1,7 +1,7 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.11.7'
-    id 'babric-loom-extension' version '1.10.2'
+    id 'fabric-loom' version '1.14.9'
+    id 'babric-loom-extension' version '1.14.1'
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -14,7 +14,7 @@ base {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -28,7 +28,6 @@ loom {
 }
 
 repositories {
-    // Used for Babric Loom Extensions
     maven {
         name = "Babric"
         url = "https://maven.glass-launcher.net/babric"
@@ -95,7 +94,7 @@ dependencies {
     }
 
     if (project.hasProperty("modmenu_version")) {
-        modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
+        modImplementation("net.danygames2014:modmenu:${project.modmenu_version}") {
             transitive = false
         }
     }
@@ -156,6 +155,10 @@ dependencies {
         modImplementation("net.danygames2014:UniWrench:${project.uniwrench_version}") {
             transitive = false
         }
+    }
+
+    if (project.hasProperty("debugutilities_version")) {
+        modImplementation("net.danygames2014:DebugUtilities:${project.debugutilities_version}")
     }
 
     if (project.hasProperty("retroauth_version")) {
