@@ -8,7 +8,7 @@
     "CraftingRecipeManagerMixin"
   ],
   "server": [
-    "OmgWhyMixin"
+    "EntityTrackerEntryMixin"
   ],
   "client": [
     "LivingRendererMixin"
