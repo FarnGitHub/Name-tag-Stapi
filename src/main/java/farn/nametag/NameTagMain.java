@@ -1,15 +1,13 @@
 package farn.nametag;
 
-import farn.nametag.other.EntityNameTag;
 import farn.nametag.other.NameTagItem;
 import farn.nametag.other.impl.Util;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
-import farn.nametag.packet.RenameNameTagPacket;
+import farn.nametag.packet.NameTagRenamePacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.mine_diver.unsafeevents.listener.ListenerPriority;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.event.gui.screen.container.TooltipBuildEvent;
@@ -20,7 +18,6 @@ import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.recipe.CraftingRegistry;
 import net.modificationstation.stationapi.api.registry.PacketTypeRegistry;
 import net.modificationstation.stationapi.api.registry.Registry;
-import net.modificationstation.stationapi.api.server.event.entity.TrackEntityEvent;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -40,7 +37,7 @@ public class NameTagMain {
     }
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
-        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), RenameNameTagPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), NameTagRenamePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("entity_tag"), EntityNameTagUpdatePacket.TYPE);
         Util.nameTagTrackingId = NAMESPACE.id("farn_nametag_name").hashCode();
     }

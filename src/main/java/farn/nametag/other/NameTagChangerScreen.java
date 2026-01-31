@@ -1,7 +1,7 @@
 package farn.nametag.other;
 
 import farn.nametag.other.impl.Util;
-import farn.nametag.packet.RenameNameTagPacket;
+import farn.nametag.packet.NameTagRenamePacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -18,11 +18,11 @@ public class NameTagChangerScreen extends Screen {
     private String originalString = "missingno";
 
     public NameTagChangerScreen(ItemStack itemRaw) {
-        if(!(itemRaw.getItem() instanceof NameTagItem)) {
-            this.minecraft.setScreen(null);
-        } else {
+        if(itemRaw.getItem() instanceof NameTagItem) {
             item = itemRaw;
             originalString = item.getStationNbt().getString(Util.NAMETAG_ITEM_NBT_KEY);
+        } else {
+            this.minecraft.setScreen(null);
         }
     }
 
@@ -40,10 +40,10 @@ public class NameTagChangerScreen extends Screen {
         if(button.id == 2) {
             this.minecraft.setScreen(null);
         } else if(button.id == 1) {
-            if(nameTagTextbox.getText().length() > 0) {
+            if(!nameTagTextbox.getText().isEmpty()) {
                 int slot = minecraft.player.inventory.selectedSlot;
                 if(minecraft.isWorldRemote()) {
-                    PacketHelper.send(new RenameNameTagPacket(slot, nameTagTextbox.getText()));
+                    PacketHelper.send(new NameTagRenamePacket(slot, nameTagTextbox.getText()));
                 } else {
                     NbtCompound nbt = new NbtCompound();
                     nbt.putString(Util.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());

@@ -54,14 +54,16 @@ public class NameTagItem extends TemplateItem implements CustomTooltipProvider, 
         return mc.crosshairTarget == null || mc.crosshairTarget.type != HitResultType.ENTITY;
     }
 
-    private static void useNameTag(Entity entRaw, ItemStack stack) {
+    private static void useNameTag(PlayerEntity plr, Entity entRaw, ItemStack stack) {
         if(!(entRaw instanceof PlayerEntity) && entRaw instanceof EntityNameTag entityTag) {
             if(entityTag.nametag_entityHasNameTag()) {
                 entityTag.nametag_AddTaggedNamedCount();
             }
             entityTag.nametag_setEntityNameTag(stack.getStationNbt().getString(Util.NAMETAG_ITEM_NBT_KEY));
             if(NameTagConfig.instance.consumeNameTag) {
-                --stack.count;
+                if(--stack.count <= 0) {
+                    plr.inventory.removeStack(plr.inventory.selectedSlot, 0);
+                }
             }
         }
     }
@@ -69,7 +71,7 @@ public class NameTagItem extends TemplateItem implements CustomTooltipProvider, 
     @Override
     public boolean onUseOnEntityFirst(ItemStack stack, PlayerEntity player, World world, Entity entity) {
         if(!entity.world.isRemote) {
-            useNameTag(entity, stack);
+            useNameTag(player, entity, stack);
         }
         return true;
     }
