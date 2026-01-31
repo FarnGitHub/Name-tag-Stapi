@@ -1,0 +1,2 @@
+classTweaker	v1	named
+transitive-inject-interface	net/minecraft/entity/LivingEntity farn/nametag/impl/NameTagEntity

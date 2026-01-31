@@ -1,7 +1,7 @@
-package farn.nametag;
+package farn.nametag.listener;
 
-import farn.nametag.other.NameTagItem;
-import farn.nametag.other.impl.Util;
+import farn.nametag.world.NameTagItem;
+import farn.nametag.impl.NameTagMain;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
 import farn.nametag.packet.NameTagRenamePacket;
 import net.fabricmc.api.EnvType;
@@ -23,7 +23,7 @@ import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import org.apache.logging.log4j.Logger;
 
-public class NameTagMain {
+public class NameTagStationAPI {
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;
 
@@ -32,14 +32,13 @@ public class NameTagMain {
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
-        Util.farn_Nametag = new NameTagItem(NAMESPACE.id("farn_nametag")).setTranslationKey(NAMESPACE, "nametag");
-        LOGGER.info(Util.farn_Nametag.getTranslationKey());
+        NameTagMain.nametag_item = new NameTagItem(NAMESPACE.id("farn_nametag")).setTranslationKey(NAMESPACE, "nametag");
+        LOGGER.info(NameTagMain.nametag_item.getTranslationKey());
     }
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), NameTagRenamePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("entity_tag"), EntityNameTagUpdatePacket.TYPE);
-        Util.nameTagTrackingId = NAMESPACE.id("farn_nametag_name").hashCode();
     }
 
     @EventListener
@@ -47,23 +46,22 @@ public class NameTagMain {
         RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
 
         if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
-            CraftingRegistry.addShapedRecipe(new ItemStack(Util.farn_Nametag), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
+            CraftingRegistry.addShapedRecipe(new ItemStack(NameTagMain.nametag_item), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
         }
     }
 
     @Environment(EnvType.CLIENT)
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
-        Util.farn_Nametag.setTexture(NAMESPACE.id("item/name_tag"));
+        NameTagMain.nametag_item.setTexture(NAMESPACE.id("item/name_tag"));
     }
 
     @Environment(EnvType.CLIENT)
     @EventListener(priority = ListenerPriority.HIGHEST)
     public void customNameTooltip(TooltipBuildEvent event) {
         if(!event.tooltip.isEmpty()) {
-            if(Util.itemHasNameTag(event.itemStack)) {
-                event.tooltip.set(0, event.itemStack.getStationNbt().getString(Util.CUSTOM_NAME_NBT_KEY));
-                event.add("§7§o" + event.itemStack.getItem().getTranslatedName() + "§r");
+            if(NameTagMain.itemHasCustomName(event.itemStack)) {
+                event.tooltip.set(0, event.itemStack.getStationNbt().getString(NameTagMain.CUSTOM_NAME_NBT_KEY));
             }
         }
     }

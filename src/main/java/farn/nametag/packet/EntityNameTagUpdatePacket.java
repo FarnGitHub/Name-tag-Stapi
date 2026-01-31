@@ -1,14 +1,12 @@
 package farn.nametag.packet;
 
-import farn.nametag.other.EntityNameTag;
-import farn.nametag.other.impl.Util;
+import farn.nametag.impl.NameTagMain;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.ClientWorld;
-import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.SideUtil;
@@ -63,12 +61,9 @@ public class EntityNameTagUpdatePacket extends Packet implements ManagedPacket<E
 
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler handler) {
-        if(Util.getMinecraftInstance().world instanceof ClientWorld world) {
-            LivingEntity entity = (LivingEntity) world.getEntity(entityId);
-            if (entity instanceof EntityNameTag tagEntity) {
-                tagEntity.nametag_setEntityNameTag(name);
-            }
-        }
+        if(NameTagMain.getMinecraft().world instanceof ClientWorld world
+            && world.getEntity(entityId) instanceof LivingEntity entity)
+                 entity.nametag_getNametagData().setName(name);
     }
 
     @Override

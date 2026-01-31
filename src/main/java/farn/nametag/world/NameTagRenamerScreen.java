@@ -1,37 +1,31 @@
-package farn.nametag.other;
+package farn.nametag.world;
 
-import farn.nametag.other.impl.Util;
+import farn.nametag.impl.NameTagMain;
 import farn.nametag.packet.NameTagRenamePacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
-import net.modificationstation.stationapi.impl.item.StationNBTSetter;
 import org.lwjgl.input.Keyboard;
 
-public class NameTagChangerScreen extends Screen {
+public class NameTagRenamerScreen extends Screen {
     private TextFieldWidget nameTagTextbox;
-    private ItemStack item;
-    private String originalString = "missingno";
+    private final ItemStack item;
+    private final String originalString;
 
-    public NameTagChangerScreen(ItemStack itemRaw) {
-        if(itemRaw.getItem() instanceof NameTagItem) {
-            item = itemRaw;
-            originalString = item.getStationNbt().getString(Util.NAMETAG_ITEM_NBT_KEY);
-        } else {
-            this.minecraft.setScreen(null);
-        }
+    public NameTagRenamerScreen(ItemStack itemRaw) {
+        item = itemRaw;
+        originalString = item.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
     }
 
     public void init() {
-        TranslationStorage var1 = TranslationStorage.getInstance();
+        TranslationStorage translate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents(true);
         this.buttons.clear();
-        this.buttons.add(new ButtonWidget(1, this.width / 2 - 100, this.height / 4 + 84, 100, 20, "Save Tag"));
-        this.buttons.add(new ButtonWidget(2, this.width / 2, this.height / 4 + 84, 100, 20, var1.get("gui.cancel")));
+        this.buttons.add(new ButtonWidget(1, this.width / 2 - 100, this.height / 4 + 84, 100, 20, translate.get("screen.farnnametag.apply")));
+        this.buttons.add(new ButtonWidget(2, this.width / 2, this.height / 4 + 84, 100, 20, translate.get("gui.cancel")));
         this.nameTagTextbox = new TextFieldWidget(this, this.textRenderer, this.width / 2 - 100, this.height / 16 + 84, 200, 20, originalString);
         ((ButtonWidget)this.buttons.get(0)).active = false;
     }
@@ -45,9 +39,7 @@ public class NameTagChangerScreen extends Screen {
                 if(minecraft.isWorldRemote()) {
                     PacketHelper.send(new NameTagRenamePacket(slot, nameTagTextbox.getText()));
                 } else {
-                    NbtCompound nbt = new NbtCompound();
-                    nbt.putString(Util.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
-                    StationNBTSetter.cast(item).setStationNbt(nbt);
+                    item.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
                 }
                 this.minecraft.setScreen(null);
             }
@@ -56,7 +48,7 @@ public class NameTagChangerScreen extends Screen {
 
     public void render(int i1, int i2, float f3) {
         this.renderBackground();
-        this.drawCenteredTextWithShadow(this.textRenderer, "Enter Name Tag", this.width / 2, 60, 10526880);
+        this.drawCenteredTextWithShadow(this.textRenderer, TranslationStorage.getInstance().get("screen.farnnametag.title"), this.width / 2, 60, 10526880);
         this.nameTagTextbox.render();
         super.render(i1, i2, f3);
     }
@@ -64,7 +56,7 @@ public class NameTagChangerScreen extends Screen {
     protected void keyPressed(char character, int keyCode) {
         if(nameTagTextbox.focused) {
             nameTagTextbox.keyPressed(character, keyCode);
-            ((ButtonWidget)this.buttons.get(0)).active = nameTagTextbox.getText().length() > 0 && !originalString.equals(nameTagTextbox.getText());
+            ((ButtonWidget)this.buttons.get(0)).active = !nameTagTextbox.getText().isEmpty() && !originalString.equals(nameTagTextbox.getText());
         }
     }
 

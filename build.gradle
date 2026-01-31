@@ -19,9 +19,7 @@ java {
 }
 
 loom {
-    if (project.hasProperty("accesswidener_name") && project.accesswidener_name.length() > 0) {
-        accessWidenerPath = file("src/main/resources/${project.accesswidener_name}.accesswidener")
-    }
+    accessWidenerPath = file("src/main/resources/${project.accesswidener_name}")
     mixin {
         useLegacyMixinAp = false
     }
@@ -157,10 +155,6 @@ dependencies {
         }
     }
 
-    if (project.hasProperty("debugutilities_version")) {
-        modImplementation("net.danygames2014:DebugUtilities:${project.debugutilities_version}")
-    }
-
     if (project.hasProperty("retroauth_version")) {
         modRuntimeOnly("maven.modrinth:retroauth:${project.retroauth_version}-b1.7.3") {
             transitive = false
@@ -198,6 +192,7 @@ tasks.withType(GenerateModuleMetadata).configureEach {
 // Gradle 9 fails the build if there are no tests, but we are using the test package for a test mod
 tasks.withType(Test).configureEach {
     failOnNoDiscoveredTests = false
+    def why = "what"
 }
 
 java {

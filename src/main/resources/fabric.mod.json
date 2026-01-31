@@ -14,16 +14,19 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "farn.nametag.NameTagMain"
+      "farn.nametag.listener.NameTagStationAPI"
     ],
     "gcapi3": [
-      "farn.nametag.other.listener.NameTagConfig"
+      "farn.nametag.listener.NameTagGlassConfig"
+    ],
+    "bhcreative:event_bus": [
+      "farn.nametag.listener.NameTagBHCreative"
     ]
   },
   "mixins": [
     "farnnametag.mixins.json"
   ],
-
+  "classTweaker": "farnnametag.classTweaker",
   "depends": {
     "minecraft": "1.0.0-beta.7.3",
     "gcapi3": "*"

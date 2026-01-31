@@ -1,6 +1,5 @@
 package farn.nametag.mixin;
 
-import farn.nametag.other.EntityNameTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
@@ -11,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntityRenderer.class)
-public abstract class LivingRendererMixin {
+public abstract class LivingEntityRendererMixin {
     @Shadow
     protected abstract void renderNameTag(
             LivingEntity entity,
@@ -25,9 +24,8 @@ public abstract class LivingRendererMixin {
             at = @At("TAIL")
     )
     private void nametag_renderNameTag(LivingEntity entity, double dx, double dy, double dz, CallbackInfo ci) {
-        EntityNameTag tag = (EntityNameTag) entity;
-        if (tag.nametag_entityHasNameTag() && !Minecraft.isDebugProfilerEnabled()) {
-            this.renderNameTag(entity, tag.nametag_getEntityNameTag(), dx, dy, dz, 64);
+        if (entity.nametag_getNametagData().hasName() && !Minecraft.isDebugProfilerEnabled()) {
+            this.renderNameTag(entity, entity.nametag_getNametagData().getName(), dx, dy, dz, 64);
         }
     }
 }

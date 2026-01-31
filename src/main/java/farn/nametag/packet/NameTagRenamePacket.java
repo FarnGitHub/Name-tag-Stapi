@@ -1,7 +1,7 @@
 package farn.nametag.packet;
 
-import farn.nametag.other.NameTagItem;
-import farn.nametag.other.impl.Util;
+import farn.nametag.world.NameTagItem;
+import farn.nametag.impl.NameTagMain;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -72,7 +72,7 @@ public class NameTagRenamePacket extends Packet
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(handler);
         ItemStack stack = player.inventory.getStack(slot);
         if (stack != null && stack.getItem() instanceof NameTagItem) {
-            stack.getStationNbt().putString(Util.NAMETAG_ITEM_NBT_KEY, tag);
+            stack.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, tag);
         }
     }
 

@@ -1,6 +1,5 @@
-package farn.nametag.other.impl;
+package farn.nametag.impl;
 
-import farn.nametag.NameTagMain;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -10,13 +9,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
-public class Util {
-    public static Item farn_Nametag;
+public class NameTagMain {
+    public static Item nametag_item;
 
     public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
     public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
-
-    public static int nameTagTrackingId;
 
     @Environment(EnvType.CLIENT)
     private static Minecraft mc;
@@ -25,12 +22,12 @@ public class Util {
         return item.getStationNbt().contains(NAMETAG_ITEM_NBT_KEY);
     }
 
-    public static boolean itemHasNameTag(ItemStack item) {
+    public static boolean itemHasCustomName(ItemStack item) {
         return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
     }
 
     @Environment(EnvType.CLIENT)
-    public static Minecraft getMinecraftInstance() {
+    public static Minecraft getMinecraft() {
         if(mc == null) {
             mc = ((Minecraft) FabricLoader.getInstance().getGameInstance());
         }
@@ -38,7 +35,7 @@ public class Util {
         return mc;
     }
 
-    public static ItemStack findItemAndPutNameTag(CraftingInventory inventory) {
+    public static ItemStack putCustomNameToItem(CraftingInventory inventory) {
         ItemStack item = null;
         ItemStack nameTag = null;
 
@@ -46,7 +43,7 @@ public class Util {
             ItemStack stack = inventory.getStack(i);
             if (stack == null) continue;
 
-            if (stack.getItem() == farn_Nametag) {
+            if (stack.getItem() == nametag_item) {
                 nameTag = stack;
             } else if (item == null) {
                 item = stack;

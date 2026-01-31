@@ -1,9 +1,9 @@
-package farn.nametag.other.listener;
+package farn.nametag.listener;
 
 import net.glasslauncher.mods.gcapi3.api.ConfigEntry;
 import net.glasslauncher.mods.gcapi3.api.ConfigRoot;
 
-public class NameTagConfig {
+public class NameTagGlassConfig {
 
     @ConfigRoot(value = "nametag_config", visibleName = "NameTag Config")
     public static final InstanceConfig instance = new InstanceConfig();
