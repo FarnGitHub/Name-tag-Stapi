@@ -86,7 +86,7 @@ public class NameTagEntityData {
 
     public void tick() {
         if(++tick == (byte) 30) {
-            updateClient();
+            if(hasName()) updateClient();
             tick = 0;
         }
     }
