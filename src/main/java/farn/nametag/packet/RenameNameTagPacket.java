@@ -12,24 +12,25 @@ import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.SideUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class NameTagRenamePacket extends Packet
-        implements ManagedPacket<NameTagRenamePacket> {
+public class RenameNameTagPacket extends Packet
+        implements ManagedPacket<RenameNameTagPacket> {
 
-    public static final PacketType<NameTagRenamePacket> TYPE =
-            PacketType.builder(false, true, NameTagRenamePacket::new).build();
+    public static final PacketType<RenameNameTagPacket> TYPE =
+            PacketType.builder(false, true, RenameNameTagPacket::new).build();
 
     public int slot;
     public String tag;
 
-    public NameTagRenamePacket() {
+    public RenameNameTagPacket() {
     }
 
-    public NameTagRenamePacket(int slot, String tag) {
+    public RenameNameTagPacket(int slot, String tag) {
         this.slot = slot;
         this.tag = tag;
     }
@@ -56,7 +57,7 @@ public class NameTagRenamePacket extends Packet
 
     @Override
     public int size() {
-        return 4 + 2 + tag.length() * 2;
+        return 4 + tag.length();
     }
 
     @Override
@@ -71,13 +72,12 @@ public class NameTagRenamePacket extends Packet
     public void handleServer(NetworkHandler handler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(handler);
         ItemStack stack = player.inventory.getStack(slot);
-        if (stack != null && stack.getItem() instanceof NameTagItem) {
+        if (stack != null && stack.getItem() instanceof NameTagItem)
             stack.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, tag);
-        }
     }
 
     @Override
-    public PacketType<NameTagRenamePacket> getType() {
+    public @NotNull PacketType<RenameNameTagPacket> getType() {
         return TYPE;
     }
 }

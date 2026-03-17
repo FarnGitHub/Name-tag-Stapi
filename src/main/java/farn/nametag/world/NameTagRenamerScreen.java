@@ -1,7 +1,7 @@
 package farn.nametag.world;
 
 import farn.nametag.impl.NameTagMain;
-import farn.nametag.packet.NameTagRenamePacket;
+import farn.nametag.packet.RenameNameTagPacket;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -20,6 +20,7 @@ public class NameTagRenamerScreen extends Screen {
         originalString = item.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
     }
 
+    @SuppressWarnings("unchecked")
     public void init() {
         TranslationStorage translate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents(true);
@@ -31,16 +32,15 @@ public class NameTagRenamerScreen extends Screen {
     }
 
     protected void buttonClicked(ButtonWidget button) {
-        if(button.id == 2) {
+        if(button.id == 2)
             this.minecraft.setScreen(null);
-        } else if(button.id == 1) {
+        else if(button.id == 1) {
             if(!nameTagTextbox.getText().isEmpty()) {
                 int slot = minecraft.player.inventory.selectedSlot;
-                if(minecraft.isWorldRemote()) {
-                    PacketHelper.send(new NameTagRenamePacket(slot, nameTagTextbox.getText()));
-                } else {
+                if(minecraft.isWorldRemote())
+                    PacketHelper.send(new RenameNameTagPacket(slot, nameTagTextbox.getText()));
+                else
                     item.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, nameTagTextbox.getText());
-                }
                 this.minecraft.setScreen(null);
             }
         }
@@ -56,12 +56,17 @@ public class NameTagRenamerScreen extends Screen {
     protected void keyPressed(char character, int keyCode) {
         if(nameTagTextbox.focused) {
             nameTagTextbox.keyPressed(character, keyCode);
-            ((ButtonWidget)this.buttons.get(0)).active = !nameTagTextbox.getText().isEmpty() && !originalString.equals(nameTagTextbox.getText());
+            ((ButtonWidget)this.buttons.get(0)).active =
+                    isValidText(nameTagTextbox.getText());
         }
     }
 
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         this.nameTagTextbox.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private boolean isValidText(String str) {
+        return !str.isEmpty() && !str.equals(originalString);
     }
 }

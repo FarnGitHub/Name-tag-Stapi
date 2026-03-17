@@ -14,8 +14,7 @@ public class CraftingRecipeManagerMixin {
     @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
     private void addNametagRecipe(CraftingInventory inventory, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = NameTagMain.putCustomNameToItem(inventory);
-        if(stack != null) {
+        if(stack != null)
             cir.setReturnValue(stack);
-        }
     }
 }

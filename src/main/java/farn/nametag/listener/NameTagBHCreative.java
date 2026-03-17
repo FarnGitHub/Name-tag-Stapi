@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import paulevs.bhcreative.listeners.VanillaTabListener;
 import paulevs.bhcreative.registry.TabRegistryEvent;
 
+@SuppressWarnings("unused")
 public class NameTagBHCreative {
 
     @EventListener(priority = ListenerPriority.LOW)

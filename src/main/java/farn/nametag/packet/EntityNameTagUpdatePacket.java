@@ -1,6 +1,6 @@
 package farn.nametag.packet;
 
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.impl.MC;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
@@ -10,6 +10,7 @@ import net.minecraft.world.ClientWorld;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.SideUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,13 +18,12 @@ import java.io.IOException;
 
 public class EntityNameTagUpdatePacket extends Packet implements ManagedPacket<EntityNameTagUpdatePacket> {
     public static final PacketType<EntityNameTagUpdatePacket> TYPE =
-            PacketType.builder(true, true, EntityNameTagUpdatePacket::new).build();
+            PacketType.builder(true, false, EntityNameTagUpdatePacket::new).build();
 
     public int entityId;
     public String name;
 
     public EntityNameTagUpdatePacket() {
-
     }
 
     public EntityNameTagUpdatePacket(int entityId, String name) {
@@ -61,18 +61,18 @@ public class EntityNameTagUpdatePacket extends Packet implements ManagedPacket<E
 
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler handler) {
-        if(NameTagMain.getMinecraft().world instanceof ClientWorld world
+        if(MC.get().world instanceof ClientWorld world
             && world.getEntity(entityId) instanceof LivingEntity entity)
                  entity.nametag_getNametagData().setName(name);
     }
 
     @Override
     public int size() {
-        return 4 + 2 + name.length() * 2;
+        return 4 + name.length();
     }
 
     @Override
-    public PacketType<EntityNameTagUpdatePacket> getType() {
+    public @NotNull PacketType<EntityNameTagUpdatePacket> getType() {
         return TYPE;
     }
 }

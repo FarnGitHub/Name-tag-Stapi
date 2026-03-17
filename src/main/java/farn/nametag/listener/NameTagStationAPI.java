@@ -3,7 +3,7 @@ package farn.nametag.listener;
 import farn.nametag.world.NameTagItem;
 import farn.nametag.impl.NameTagMain;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
-import farn.nametag.packet.NameTagRenamePacket;
+import farn.nametag.packet.RenameNameTagPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -23,6 +23,7 @@ import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings("unused")
 public class NameTagStationAPI {
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;
@@ -37,7 +38,7 @@ public class NameTagStationAPI {
     }
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
-        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), NameTagRenamePacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_name_tag"), RenameNameTagPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("entity_tag"), EntityNameTagUpdatePacket.TYPE);
     }
 
@@ -45,9 +46,8 @@ public class NameTagStationAPI {
     public void registerRecipes(RecipeRegisterEvent event) {
         RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
 
-        if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
+        if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED)
             CraftingRegistry.addShapedRecipe(new ItemStack(NameTagMain.nametag_item), "w", "o", "o", 'w', new ItemStack(Item.IRON_INGOT), 'o', new ItemStack(Item.PAPER));
-        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -59,11 +59,9 @@ public class NameTagStationAPI {
     @Environment(EnvType.CLIENT)
     @EventListener(priority = ListenerPriority.HIGHEST)
     public void customNameTooltip(TooltipBuildEvent event) {
-        if(!event.tooltip.isEmpty()) {
-            if(NameTagMain.itemHasCustomName(event.itemStack)) {
+        if(!event.tooltip.isEmpty())
+            if(NameTagMain.itemHasCustomName(event.itemStack))
                 event.tooltip.set(0, event.itemStack.getStationNbt().getString(NameTagMain.CUSTOM_NAME_NBT_KEY));
-            }
-        }
     }
 
 }

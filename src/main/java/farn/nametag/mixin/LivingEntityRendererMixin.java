@@ -24,8 +24,7 @@ public abstract class LivingEntityRendererMixin {
             at = @At("TAIL")
     )
     private void nametag_renderNameTag(LivingEntity entity, double dx, double dy, double dz, CallbackInfo ci) {
-        if (entity.nametag_getNametagData().hasName() && !Minecraft.isDebugProfilerEnabled()) {
+        if (entity.nametag_getNametagData().hasName() && !Minecraft.isDebugProfilerEnabled())
             this.renderNameTag(entity, entity.nametag_getNametagData().getName(), dx, dy, dz, 64);
-        }
     }
 }

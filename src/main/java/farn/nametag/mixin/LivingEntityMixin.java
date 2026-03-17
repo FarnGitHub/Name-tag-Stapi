@@ -2,10 +2,8 @@ package farn.nametag.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import farn.nametag.world.NameTagEntityData;
+import farn.nametag.world.NameTagData;
 import farn.nametag.impl.NameTagEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -19,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LivingEntityMixin implements NameTagEntity {
 
     @Unique
-    private NameTagEntityData nametag_impl;
+    private NameTagData nametag_impl;
 
     @Override
-    public NameTagEntityData nametag_getNametagData() {
+    public NameTagData nametag_getNametagData() {
         return nametag_impl;
     }
 
@@ -46,16 +44,10 @@ public class LivingEntityMixin implements NameTagEntity {
         nametag_impl.dropNameTag();
     }
 
-    @Environment(EnvType.SERVER)
-    @Inject(method="baseTick", at = @At("TAIL"))
-    public void trackNameTagServer(CallbackInfo ci) {
-        nametag_impl.tick();
-    }
-
     @Inject(method="<init>", at = @At("TAIL"))
     public void nametag_init(CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
-        nametag_impl = new NameTagEntityData(self);
+        nametag_impl = new NameTagData(self);
         nametag_impl.setCanPut(!(self instanceof  PlayerEntity));
     }
 }

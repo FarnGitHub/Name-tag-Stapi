@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 
-public class NameTagEntityData {
+public class NameTagData {
 
     private int overriddenCount = 1;
     private String name = "";
@@ -20,9 +20,9 @@ public class NameTagEntityData {
 
     private boolean canPut = true;
     private boolean despawn = false;
-    private byte tick = 0;
+    public boolean dirty = true;
 
-    public NameTagEntityData(LivingEntity self) {
+    public NameTagData(LivingEntity self) {
         this.ent = self;
     }
 
@@ -54,7 +54,7 @@ public class NameTagEntityData {
         if(canPut) {
             name = string;
             despawn = !hasName();
-            updateClient();
+            dirty = true;
         }
     }
 
@@ -82,12 +82,5 @@ public class NameTagEntityData {
 
     public void setCanPut(boolean canPut) {
         this.canPut = canPut;
-    }
-
-    public void tick() {
-        if(++tick == (byte) 30) {
-            if(hasName()) updateClient();
-            tick = 0;
-        }
     }
 }

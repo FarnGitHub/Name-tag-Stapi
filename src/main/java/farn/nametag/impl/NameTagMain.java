@@ -1,9 +1,5 @@
 package farn.nametag.impl;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,24 +11,12 @@ public class NameTagMain {
     public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
     public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
 
-    @Environment(EnvType.CLIENT)
-    private static Minecraft mc;
-
     public static boolean nameTagHasName(ItemStack item) {
         return item.getStationNbt().contains(NAMETAG_ITEM_NBT_KEY);
     }
 
     public static boolean itemHasCustomName(ItemStack item) {
         return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static Minecraft getMinecraft() {
-        if(mc == null) {
-            mc = ((Minecraft) FabricLoader.getInstance().getGameInstance());
-        }
-
-        return mc;
     }
 
     public static ItemStack putCustomNameToItem(CraftingInventory inventory) {

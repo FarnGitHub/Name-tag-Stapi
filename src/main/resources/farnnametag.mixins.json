@@ -9,6 +9,7 @@
     "CraftingRecipeManagerMixin"
   ],
   "server": [
+    "EntityTrackerEntryMixin"
   ],
   "client": [
     "LivingEntityRendererMixin"
