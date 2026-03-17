@@ -1,6 +1,6 @@
 package farn.nametag.packet;
 
-import farn.nametag.impl.MC;
+import farn.nametag.client.MC;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +26,7 @@ public class EntityNameTagUpdatePacket extends Packet implements ManagedPacket<E
     public EntityNameTagUpdatePacket() {
     }
 
+    @Environment(EnvType.SERVER)
     public EntityNameTagUpdatePacket(int entityId, String name) {
         this.entityId = entityId;
         this.name = name;

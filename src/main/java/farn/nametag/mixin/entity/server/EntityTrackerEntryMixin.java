@@ -1,4 +1,4 @@
-package farn.nametag.mixin;
+package farn.nametag.mixin.entity.server;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

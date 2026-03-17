@@ -1,5 +1,6 @@
-package farn.nametag.impl;
+package farn.nametag;
 
+import farn.nametag.listener.NameTagUniTweak;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,8 @@ public class NameTagMain {
 
     public static final String CUSTOM_NAME_NBT_KEY = "farn_nametag_customname";
     public static final String NAMETAG_ITEM_NBT_KEY = "farn_nametag_nametagname";
+
+    public static boolean uniTweak = false;
 
     public static boolean nameTagHasName(ItemStack item) {
         return item.getStationNbt().contains(NAMETAG_ITEM_NBT_KEY);
@@ -51,5 +54,11 @@ public class NameTagMain {
         }
 
         return null;
+    }
+
+    public static boolean IsUniTweakHideF3EntityID() {
+        if(uniTweak)
+            return NameTagUniTweak.disableF3EntityId();
+        return false;
     }
 }

@@ -21,6 +21,9 @@
     ],
     "bhcreative:event_bus": [
       "farn.nametag.listener.NameTagBHCreative"
+    ],
+    "unitweaks:event_bus": [
+      "farn.nametag.listener.NameTagUniTweak"
     ]
   },
   "mixins": [

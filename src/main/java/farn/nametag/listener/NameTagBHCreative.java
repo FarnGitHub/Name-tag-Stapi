@@ -1,6 +1,6 @@
 package farn.nametag.listener;
 
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.mine_diver.unsafeevents.listener.ListenerPriority;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
 package farn.nametag.world;
 
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import farn.nametag.listener.NameTagGlassConfig;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
 import net.fabricmc.api.EnvType;

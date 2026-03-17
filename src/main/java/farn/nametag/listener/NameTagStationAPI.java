@@ -1,7 +1,7 @@
 package farn.nametag.listener;
 
 import farn.nametag.world.NameTagItem;
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
 import farn.nametag.packet.RenameNameTagPacket;
 import net.fabricmc.api.EnvType;

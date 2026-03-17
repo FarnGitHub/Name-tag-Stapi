@@ -1,7 +1,8 @@
-package farn.nametag.world;
+package farn.nametag.client;
 
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import farn.nametag.packet.RenameNameTagPacket;
+import farn.nametag.world.NameTagItem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -13,15 +14,23 @@ import org.lwjgl.input.Keyboard;
 public class NameTagRenamerScreen extends Screen {
     private TextFieldWidget nameTagTextbox;
     private final ItemStack item;
-    private final String originalString;
+    private String originalString = "";
+    private final boolean invalidItem;
 
     public NameTagRenamerScreen(ItemStack itemRaw) {
         item = itemRaw;
-        originalString = item.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
+        if(item != null && item.getItem() instanceof NameTagItem) {
+            invalidItem = false;
+            originalString = item.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
+        } else invalidItem = true;
     }
 
     @SuppressWarnings("unchecked")
     public void init() {
+        if(invalidItem) {
+            this.minecraft.setScreen(null);
+            return;
+        }
         TranslationStorage translate = TranslationStorage.getInstance();
         Keyboard.enableRepeatEvents(true);
         this.buttons.clear();

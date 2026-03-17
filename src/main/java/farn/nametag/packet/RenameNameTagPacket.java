@@ -1,7 +1,7 @@
 package farn.nametag.packet;
 
 import farn.nametag.world.NameTagItem;
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -30,6 +30,7 @@ public class RenameNameTagPacket extends Packet
     public RenameNameTagPacket() {
     }
 
+    @Environment(EnvType.CLIENT)
     public RenameNameTagPacket(int slot, String tag) {
         this.slot = slot;
         this.tag = tag;

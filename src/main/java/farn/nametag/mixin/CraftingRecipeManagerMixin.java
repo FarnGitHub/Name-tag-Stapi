@@ -1,6 +1,6 @@
 package farn.nametag.mixin;
 
-import farn.nametag.impl.NameTagMain;
+import farn.nametag.NameTagMain;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipeManager;
