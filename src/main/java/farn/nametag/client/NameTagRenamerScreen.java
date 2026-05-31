@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import org.lwjgl.input.Keyboard;
@@ -15,14 +16,14 @@ public class NameTagRenamerScreen extends Screen {
     private TextFieldWidget nameTagTextbox;
     private final ItemStack item;
     private String originalString = "";
-    private final boolean invalidItem;
+    private boolean invalidItem = false;
 
-    public NameTagRenamerScreen(ItemStack itemRaw) {
-        item = itemRaw;
-        if(item != null && item.getItem() instanceof NameTagItem) {
-            invalidItem = false;
+    public NameTagRenamerScreen(PlayerEntity player) {
+        item = player.getHand();
+        if(item != null && item.getItem() instanceof NameTagItem)
             originalString = item.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
-        } else invalidItem = true;
+        else
+            invalidItem = true;
     }
 
     @SuppressWarnings("unchecked")
@@ -77,5 +78,9 @@ public class NameTagRenamerScreen extends Screen {
 
     private boolean isValidText(String str) {
         return !str.isEmpty() && !str.equals(originalString);
+    }
+
+    public boolean shouldPause() {
+        return false;
     }
 }

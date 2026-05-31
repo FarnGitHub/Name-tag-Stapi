@@ -10,4 +10,9 @@ public class MC {
     public static Minecraft get() {
         return Minecraft.INSTANCE;
     }
+
+    @Environment(EnvType.CLIENT)
+    public static void openNameTagScreen() {
+        get().setScreen(new NameTagRenamerScreen(get().player));
+    }
 }

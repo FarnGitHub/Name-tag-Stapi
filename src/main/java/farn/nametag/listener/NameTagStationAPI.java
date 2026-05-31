@@ -1,5 +1,6 @@
 package farn.nametag.listener;
 
+import farn.nametag.client.MC;
 import farn.nametag.world.NameTagItem;
 import farn.nametag.NameTagMain;
 import farn.nametag.packet.EntityNameTagUpdatePacket;
@@ -8,6 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.mine_diver.unsafeevents.listener.ListenerPriority;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.event.gui.screen.container.TooltipBuildEvent;
@@ -15,12 +17,16 @@ import net.modificationstation.stationapi.api.client.event.texture.TextureRegist
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
+import net.modificationstation.stationapi.api.event.registry.MessageListenerRegistryEvent;
+import net.modificationstation.stationapi.api.network.packet.MessagePacket;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.recipe.CraftingRegistry;
 import net.modificationstation.stationapi.api.registry.PacketTypeRegistry;
 import net.modificationstation.stationapi.api.registry.Registry;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.util.SideUtil;
 import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("unused")
@@ -44,6 +50,7 @@ public class NameTagStationAPI {
 
     @EventListener
     public void registerRecipes(RecipeRegisterEvent event) {
+        if(NameTagGlassConfig.instance.disabledRecipe) return;
         RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
 
         if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED)
@@ -62,6 +69,17 @@ public class NameTagStationAPI {
         if(!event.tooltip.isEmpty())
             if(NameTagMain.itemHasCustomName(event.itemStack))
                 event.tooltip.set(0, event.itemStack.getStationNbt().getString(NameTagMain.CUSTOM_NAME_NBT_KEY));
+    }
+
+    @EventListener
+    public void registerMessagePacket(MessageListenerRegistryEvent event) {
+        event.register(NAMESPACE.id("open_nametag_screen"), ((playerEntity, messagePacket) -> {
+            SideUtil.run(MC::openNameTagScreen, ()->{});
+        }));
+    }
+
+    public static void openNameTagScreen(PlayerEntity player) {
+        PacketHelper.sendTo(player, new MessagePacket(NAMESPACE.id("open_nametag_screen")));
     }
 
 }

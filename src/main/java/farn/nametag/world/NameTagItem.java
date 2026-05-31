@@ -1,11 +1,8 @@
 package farn.nametag.world;
 
-import farn.nametag.client.NameTagRenamerScreen;
-import farn.nametag.client.MC;
 import farn.nametag.NameTagMain;
 import farn.nametag.listener.NameTagGlassConfig;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import farn.nametag.listener.NameTagStationAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,9 +20,9 @@ public class NameTagItem extends TemplateItem implements CustomTooltipProvider, 
         super(identifier);
     }
 
-    @Environment(EnvType.CLIENT)
     public ItemStack use(ItemStack stack, World world, PlayerEntity user) {
-        MC.get().setScreen(new NameTagRenamerScreen(stack));
+        if(!world.isRemote)
+            NameTagStationAPI.openNameTagScreen(user);
         return stack;
     }
 

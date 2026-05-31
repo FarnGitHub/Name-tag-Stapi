@@ -24,12 +24,16 @@
     ],
     "unitweaks:event_bus": [
       "farn.nametag.listener.NameTagUniTweak"
+    ],
+    "farn_util:init": [
+      "farn.nametag.listener.NameTagFarnUtil"
+
     ]
   },
   "mixins": [
     "farnnametag.mixins.json"
   ],
-  "classTweaker": "farnnametag.classTweaker",
+  "accessWidener": "farnnametag.classTweaker",
   "depends": {
     "minecraft": "1.0.0-beta.7.3",
     "gcapi3": "*"
