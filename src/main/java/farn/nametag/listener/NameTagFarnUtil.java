@@ -12,7 +12,9 @@ public class NameTagFarnUtil {
     @EventListener
     public void initFinished(InitFinishedEvent event) {
         if(NameTagGlassConfig.instance.addToDungeonLoot) {
-            DungeonAPI.addLoot(new DungeonLoot(new ItemStack(NameTagMain.nametag_item)));
+            DungeonLoot loot = new DungeonLoot(new ItemStack(NameTagMain.nametag_item));
+            loot.weight = 50;
+            DungeonAPI.addLoot(loot);
         }
     }
 }
