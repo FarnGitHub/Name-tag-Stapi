@@ -1,10 +1,12 @@
 package farn.nametag;
 
+import farn.nametag.listener.NameTagStationAPI;
 import farn.nametag.listener.NameTagUniTweak;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public class NameTagMain {
     public static Item nametag_item;
@@ -60,5 +62,9 @@ public class NameTagMain {
         if(uniTweak)
             return NameTagUniTweak.disableF3EntityId();
         return false;
+    }
+
+    public static Identifier id(String name) {
+        return NameTagStationAPI.NAMESPACE.id(name);
     }
 }

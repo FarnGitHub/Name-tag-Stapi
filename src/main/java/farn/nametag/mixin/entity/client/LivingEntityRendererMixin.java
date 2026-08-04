@@ -24,8 +24,8 @@ public abstract class LivingEntityRendererMixin {
             method = "renderNameTag(Lnet/minecraft/entity/LivingEntity;DDD)V",
             at = @At("HEAD")
     )
-    private void nametag_renderNameTag(LivingEntity entity, double dx, double dy, double dz, CallbackInfo ci) {
+    private void nametag_renderNameTag(LivingEntity entity, double x, double y, double z, CallbackInfo ci) {
         if (entity.nametag_getNametagData().hasName() && (!Minecraft.isDebugProfilerEnabled() || NameTagMain.IsUniTweakHideF3EntityID()))
-            this.renderNameTag(entity, entity.nametag_getNametagData().getName(), dx, dy, dz, 64);
+            this.renderNameTag(entity, entity.nametag_getNametagData().getName(), x, y, z, 64);
     }
 }

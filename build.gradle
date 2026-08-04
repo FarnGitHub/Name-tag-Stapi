@@ -162,7 +162,11 @@ dependencies {
         modImplementation("maven.modrinth:unitweaks:${project.unitweaks_version}-b1.7.3")
     }
 
-    modImplementation("maven.modrinth:farnutil:3.6.2-babric-b1.7.3")
+    modImplementation("maven.modrinth:farnutil:3.6.7-babric-b1.7.3") {
+        transitive = true
+    }
+
+    modRuntimeOnly("maven.modrinth:snow-golem-backport-stationapi:1.1-b1.7.3")
 
     modRuntimeOnly("maven.modrinth:fast-stapi-intro:2.0.0-b1.7.3")
 }

@@ -24,10 +24,6 @@
     ],
     "unitweaks:event_bus": [
       "farn.nametag.listener.NameTagUniTweak"
-    ],
-    "farn_util:init": [
-      "farn.nametag.listener.NameTagFarnUtil"
-
     ]
   },
   "mixins": [
@@ -37,5 +33,8 @@
   "depends": {
     "minecraft": "1.0.0-beta.7.3",
     "gcapi3": "*"
+  },
+  "recommends": {
+    "farn_util": ">=3.6.4-babric"
   }
 }

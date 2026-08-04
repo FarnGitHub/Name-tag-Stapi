@@ -1,35 +1,34 @@
 package farn.nametag.world;
 
+import farn.farn_util.api.id_tracker.IDDataTracker;
 import farn.nametag.NameTagMain;
 import farn.nametag.listener.NameTagGlassConfig;
-import farn.nametag.packet.EntityNameTagUpdatePacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 
-public class NameTagData {
+public class NametagData {
 
     private int overriddenCount = 1;
-    private String name = "";
 
     private final LivingEntity ent;
 
     private boolean canPut = true;
     private boolean despawn = false;
-    public boolean dirty = true;
 
-    public NameTagData(LivingEntity self) {
+    public static String trackId = NameTagMain.id("name").toString();
+
+    public NametagData(LivingEntity self) {
         this.ent = self;
+        this.setCanPut(!(self instanceof  PlayerEntity));
+        this.putNameTagTracker();
     }
 
     public void write(NbtCompound nbt) {
         if(canPut) {
             nbt.putString("farnEntityName", getName());
-            despawn = !hasName();
             nbt.putInt("farnEntityTaggedName", this.overriddenCount);
         }
     }
@@ -37,24 +36,22 @@ public class NameTagData {
     public void read(NbtCompound nbt) {
         if(canPut) {
             setName(nbt.getString("farnEntityName"));
-            despawn = !hasName();
             overriddenCount = nbt.getInt("farnEntityTaggedName");
         }
     }
 
     public boolean hasName() {
-        return canPut && name != null && !name.isEmpty();
+        return canPut && getName() != null && !getName().isEmpty();
     }
 
     public String getName() {
-        return name;
+        return getTracker().get(trackId);
     }
 
     public void setName(String string) {
         if(canPut) {
-            name = string;
+            getTracker().set(trackId, string);
             despawn = !hasName();
-            dirty = true;
         }
     }
 
@@ -64,10 +61,7 @@ public class NameTagData {
 
     public void dropNameTag() {
         if(NameTagGlassConfig.instance.consumeNameTag && hasName() && !ent.world.isRemote) {
-            ItemStack nameTag = new ItemStack(NameTagMain.nametag_item);
-            nameTag.count = overriddenCount;
-            nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, getName());
-            ent.dropItem(nameTag, 0.0F);
+            ent.dropItem(createNameTagItem(), 0.0F);
         }
     }
 
@@ -75,12 +69,22 @@ public class NameTagData {
         overriddenCount = MathHelper.clamp(++overriddenCount, 1, 64);
     }
 
-    public void updateClient() {
-        if(FabricLoader.getInstance().getEnvironmentType().equals(EnvType.SERVER))
-            PacketHelper.sendToAllTracking(ent, new EntityNameTagUpdatePacket(ent.id, getName()));
+    public void putNameTagTracker() {
+        getTracker().startTracking(trackId, "");
     }
 
     public void setCanPut(boolean canPut) {
         this.canPut = canPut;
+    }
+
+    private IDDataTracker getTracker() {
+        return ent.farnutil_getIdDataTracker();
+    }
+
+    public ItemStack createNameTagItem() {
+        ItemStack nameTag = new ItemStack(NameTagMain.nametag_item);
+        nameTag.count = overriddenCount;
+        nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, getName());
+        return nameTag;
     }
 }

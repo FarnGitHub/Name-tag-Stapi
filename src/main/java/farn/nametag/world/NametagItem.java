@@ -1,8 +1,10 @@
 package farn.nametag.world;
 
 import farn.nametag.NameTagMain;
+import farn.nametag.impl.ClientHandler;
 import farn.nametag.listener.NameTagGlassConfig;
-import farn.nametag.listener.NameTagStationAPI;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,15 +16,15 @@ import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public class NameTagItem extends TemplateItem implements CustomTooltipProvider, UseOnEntityFirst {
+public class NametagItem extends TemplateItem implements CustomTooltipProvider, UseOnEntityFirst {
 
-    public NameTagItem(Identifier identifier) {
+    public NametagItem(Identifier identifier) {
         super(identifier);
     }
 
     public ItemStack use(ItemStack stack, World world, PlayerEntity user) {
-        if(!world.isRemote)
-            NameTagStationAPI.openNameTagScreen(user);
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
+            ClientHandler.openNameTagScreen();
         return stack;
     }
 

@@ -2,7 +2,7 @@ package farn.nametag.mixin.entity.common;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import farn.nametag.world.NameTagData;
+import farn.nametag.world.NametagData;
 import farn.nametag.impl.NameTagEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LivingEntityMixin implements NameTagEntity {
 
     @Unique
-    private NameTagData nametag_impl;
+    private NametagData nametag_impl;
 
     @Override
-    public NameTagData nametag_getNametagData() {
+    public NametagData nametag_getNametagData() {
         return nametag_impl;
     }
 
@@ -46,8 +46,6 @@ public class LivingEntityMixin implements NameTagEntity {
 
     @Inject(method="<init>", at = @At("TAIL"))
     public void nametag_init(CallbackInfo ci) {
-        LivingEntity self = (LivingEntity) (Object) this;
-        nametag_impl = new NameTagData(self);
-        nametag_impl.setCanPut(!(self instanceof  PlayerEntity));
+        nametag_impl = new NametagData((LivingEntity)(Object)this);
     }
 }

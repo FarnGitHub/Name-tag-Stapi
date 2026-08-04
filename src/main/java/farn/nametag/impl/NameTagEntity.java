@@ -1,11 +1,11 @@
 package farn.nametag.impl;
 
-import farn.nametag.world.NameTagData;
+import farn.nametag.world.NametagData;
 import net.modificationstation.stationapi.api.util.Util;
 
 public interface NameTagEntity {
 
-    default NameTagData nametag_getNametagData() {
+    default NametagData nametag_getNametagData() {
         return Util.assertImpl();
     }
 }
