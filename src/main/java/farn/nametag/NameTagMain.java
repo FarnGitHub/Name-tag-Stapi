@@ -24,7 +24,12 @@ public class NameTagMain {
         return item.getStationNbt().contains(CUSTOM_NAME_NBT_KEY);
     }
 
-    public static ItemStack putCustomNameToItem(CraftingInventory inventory) {
+    public static void addCustomNameToItem(ItemStack item, String customName) {
+        NbtCompound newNbt = item.getStationNbt();
+        newNbt.putString(CUSTOM_NAME_NBT_KEY, customName);
+    }
+
+    public static ItemStack attemptToCombineNametagWithItem(CraftingInventory inventory) {
         ItemStack item = null;
         ItemStack nameTag = null;
 
@@ -45,8 +50,7 @@ public class NameTagMain {
             ItemStack result = item.copy();
             result.count = 1;
             if (nameTagHasName(nameTag)) {
-                NbtCompound newNbt = result.getStationNbt();
-                newNbt.putString(CUSTOM_NAME_NBT_KEY, nameTag.getStationNbt().getString(NAMETAG_ITEM_NBT_KEY));
+                addCustomNameToItem(result, nameTag.getStationNbt().getString(NAMETAG_ITEM_NBT_KEY));
                 notEmpty = !nameTag.getStationNbt().getString(NAMETAG_ITEM_NBT_KEY).isEmpty();
             }
 
