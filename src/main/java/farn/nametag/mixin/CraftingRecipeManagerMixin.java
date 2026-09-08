@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class CraftingRecipeManagerMixin {
     @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
     private void addNametagRecipe(CraftingInventory inventory, CallbackInfoReturnable<ItemStack> cir) {
-        ItemStack stack = NameTagMain.putCustomNameToItem(inventory);
+        ItemStack stack = NameTagMain.attemptToCombineNametagWithItem(inventory);
         if(stack != null)
             cir.setReturnValue(stack);
     }
