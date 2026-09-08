@@ -20,6 +20,7 @@ public class NametagItem extends TemplateItem implements CustomTooltipProvider, 
 
     public NametagItem(Identifier identifier) {
         super(identifier);
+        setMaxCount(NameTagGlassConfig.instance.stackSize);
     }
 
     public ItemStack use(ItemStack stack, World world, PlayerEntity user) {

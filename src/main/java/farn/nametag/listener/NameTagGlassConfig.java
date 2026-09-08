@@ -12,5 +12,8 @@ public class NameTagGlassConfig {
 
         @ConfigEntry(name = "Consume Nametag", description = "Consume Nametag upon using on entity", multiplayerSynced = true)
         public Boolean consumeNameTag = false;
+
+        @ConfigEntry(name="Stack Size", multiplayerSynced = true, requiresRestart = true, minValue = 1, maxValue = 64)
+        public Integer stackSize = 64;
     }
 }
