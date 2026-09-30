@@ -2,12 +2,13 @@ package farn.nametag.mixin.entity.common;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import farn.nametag.world.NametagData;
 import farn.nametag.impl.NameTagEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin implements NameTagEntity {
 
+    @Shadow
+    protected int despawnCounter;
     @Unique
     private NametagData nametag_impl;
 
@@ -34,9 +37,13 @@ public class LivingEntityMixin implements NameTagEntity {
         nametag_impl.read(nbt);
     }
 
-    @WrapMethod(method = "canDespawn")
-    public boolean nametag_preventDespawn(Operation<Boolean> original) {
-        return nametag_getNametagData().canDespawn() && original.call();
+    @WrapMethod(method="tryDespawn")
+    public void nametag_preventDespawn(Operation<Void> original) {
+        if(nametag_getNametagData().canDespawn()) {
+            original.call();
+        } else {
+            despawnCounter = 0;
+        }
     }
 
     @Inject(method = "onKilledBy", at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/LivingEntity;dropItems()V"))
