@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "entity.common.LivingEntityMixin",
-    "entity.common.WolfEntityMixin",
     "CraftingRecipeManagerMixin"
   ],
   "client": [
