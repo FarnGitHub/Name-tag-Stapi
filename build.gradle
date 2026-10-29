@@ -163,7 +163,7 @@ dependencies {
         modImplementation("maven.modrinth:unitweaks:${project.unitweaks_version}-b1.7.3")
     }
 
-    modImplementation("maven.modrinth:farnutil:3.7-babric-b1.7.3") {
+    modImplementation("maven.modrinth:farnutil:3.7.1-babric-b1.7.3") {
         transitive = true
     }
 

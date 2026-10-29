@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 
 public class NametagData {
@@ -18,7 +19,7 @@ public class NametagData {
     private boolean canPut = true;
     private boolean despawn = false;
 
-    public static String trackId = NameTagMain.id("name").toString();
+    private static final Identifier trackId = NameTagMain.id("name");
 
     public NametagData(LivingEntity self) {
         this.ent = self;
@@ -45,7 +46,7 @@ public class NametagData {
     }
 
     public String getName() {
-        return getTracker().get(trackId);
+        return getTracker().getString(trackId);
     }
 
     public void setName(String string) {
@@ -53,6 +54,14 @@ public class NametagData {
             getTracker().set(trackId, string);
             despawn = !hasName();
         }
+    }
+
+    public void putNameTag(PlayerEntity plr, ItemStack stack) {
+        if(hasName()) markOverridden();
+        setName(stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY));
+        if(NameTagGlassConfig.instance.consumeNameTag)
+            if(--stack.count <= 0)
+                plr.inventory.removeStack(plr.inventory.selectedSlot, 0);
     }
 
     public boolean canDespawn() {
@@ -82,8 +91,7 @@ public class NametagData {
     }
 
     public ItemStack createNameTagItem() {
-        ItemStack nameTag = new ItemStack(NameTagMain.nametag_item);
-        nameTag.count = overriddenCount;
+        ItemStack nameTag = new ItemStack(NameTagMain.nametag_item, overriddenCount);
         nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, getName());
         return nameTag;
     }

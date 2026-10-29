@@ -38,22 +38,18 @@ public class NametagItem extends TemplateItem implements CustomTooltipProvider, 
             return new String[]{originalTooltip, "§7§o" + nameTagName + "§r"};
     }
 
-    private static void useNameTag(PlayerEntity plr, Entity entRaw, ItemStack stack) {
-        String nameTagName = stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
-        if(!nameTagName.isEmpty() && !(entRaw instanceof PlayerEntity) && entRaw instanceof LivingEntity livEnt) {
-            if(livEnt.nametag_getNametagData().hasName())
-                livEnt.nametag_getNametagData().markOverridden();
-            livEnt.nametag_getNametagData().setName(stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY));
-            if(NameTagGlassConfig.instance.consumeNameTag)
-                if(--stack.count <= 0)
-                    plr.inventory.removeStack(plr.inventory.selectedSlot, 0);
-        }
-    }
-
     @Override
     public boolean onUseOnEntityFirst(ItemStack stack, PlayerEntity player, World world, Entity entity) {
-        if(!entity.world.isRemote)
-            useNameTag(player, entity, stack);
+        if(!entity.world.isRemote) {
+            String nameTagName = stack.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
+            if(
+               !nameTagName.isEmpty() &&
+               !(entity instanceof PlayerEntity) &&
+               entity instanceof LivingEntity livEnt
+            ) {
+                livEnt.nametag_getNametagData().putNameTag(player, stack);
+            }
+        }
         return true;
     }
 }
