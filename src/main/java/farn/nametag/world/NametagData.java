@@ -22,7 +22,7 @@ public class NametagData {
 
     public NametagData(LivingEntity self) {
         this.ent = self;
-        this.setCanPut(!(self instanceof  PlayerEntity));
+        this.setCanPut(self.nametag_canPutNameTag());
         this.putNameTagTracker();
     }
 

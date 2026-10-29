@@ -1,14 +1,13 @@
 package farn.nametag.world;
 
 import farn.nametag.NameTagMain;
-import farn.nametag.packet.RenameNameTagPacket;
+import farn.nametag.impl.ClientHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import org.lwjgl.input.Keyboard;
 
 public class RenamerScreen extends Screen {
@@ -39,10 +38,7 @@ public class RenamerScreen extends Screen {
         else if(button.id == 1) {
             if(!textField.getText().isEmpty()) {
                 int slot = minecraft.player.inventory.selectedSlot;
-                if(minecraft.isWorldRemote())
-                    PacketHelper.send(new RenameNameTagPacket(slot, textField.getText()));
-                else
-                    nameTag.getStationNbt().putString(NameTagMain.NAMETAG_ITEM_NBT_KEY, textField.getText());
+                ClientHandler.renameNameTag(slot, textField.getText());
                 this.minecraft.setScreen(null);
             }
         }
