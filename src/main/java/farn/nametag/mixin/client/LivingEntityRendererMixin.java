@@ -1,4 +1,4 @@
-package farn.nametag.mixin.entity.client;
+package farn.nametag.mixin.client;
 
 import farn.nametag.NameTagMain;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ public abstract class LivingEntityRendererMixin {
             at = @At("HEAD")
     )
     private void nametag_renderNameTag(LivingEntity entity, double x, double y, double z, CallbackInfo ci) {
-        if (entity.nametag_getNametagData().hasName() && (!Minecraft.isDebugProfilerEnabled() || NameTagMain.IsUniTweakHideF3EntityID()))
-            this.renderNameTag(entity, entity.nametag_getNametagData().getName(), x, y, z, 64);
+        if (entity.nametag_hasName() && (!Minecraft.isDebugProfilerEnabled() || NameTagMain.IsUniTweakHideF3EntityID()))
+            this.renderNameTag(entity, entity.nametag_getName(), x, y, z, 64);
     }
 }

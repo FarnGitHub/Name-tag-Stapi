@@ -1,4 +1,4 @@
-package farn.nametag.mixin;
+package farn.nametag.mixin.common;
 
 import farn.nametag.NameTagMain;
 import net.minecraft.inventory.CraftingInventory;

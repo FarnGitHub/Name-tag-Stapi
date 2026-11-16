@@ -47,7 +47,7 @@ public class NametagItem extends TemplateItem implements CustomTooltipProvider, 
                !(entity instanceof PlayerEntity) &&
                entity instanceof LivingEntity livEnt
             ) {
-                livEnt.nametag_getNametagData().putNameTag(player, stack);
+                livEnt.nametag_putNameTag(player, stack);
             }
         }
         return true;

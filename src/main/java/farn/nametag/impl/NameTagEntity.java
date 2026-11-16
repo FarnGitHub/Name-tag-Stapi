@@ -1,14 +1,33 @@
 package farn.nametag.impl;
 
-import farn.nametag.world.NametagData;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.modificationstation.stationapi.api.util.Util;
+import net.minecraft.item.ItemStack;
 
 public interface NameTagEntity {
 
-    default NametagData nametag_getNametagData() {
-        return Util.assertImpl();
+
+    default boolean nametag_hasName() {
+        throw new AssertionError();
+    }
+
+    default String nametag_getName() {
+        throw new AssertionError();
+    }
+
+    default void nametag_setName(String string) {
+        throw new AssertionError();
+    }
+
+    default void nametag_putNameTag(PlayerEntity plr, ItemStack stack) {
+        throw new AssertionError();
+    }
+
+    default void nametag_dropNameTag() {
+        throw new AssertionError();
+    }
+
+    default ItemStack nametag_createNameTagItem() {
+        throw new AssertionError();
     }
 
     default boolean nametag_canPutNameTag() {

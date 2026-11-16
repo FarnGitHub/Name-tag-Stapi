@@ -12,11 +12,10 @@ import org.lwjgl.input.Keyboard;
 
 public class RenamerScreen extends Screen {
     private TextFieldWidget textField;
-    private final ItemStack nameTag;
     private String currentName = "";
 
     public RenamerScreen(PlayerEntity player) {
-        nameTag = player.getHand();
+        ItemStack nameTag = player.getHand();
         if(nameTag != null)
             currentName = nameTag.getStationNbt().getString(NameTagMain.NAMETAG_ITEM_NBT_KEY);
     }
