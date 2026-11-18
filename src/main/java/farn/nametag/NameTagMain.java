@@ -76,17 +76,6 @@ public class NameTagMain {
         return NameTagStationAPI.NAMESPACE.id(name);
     }
 
-    public static int countMobWithNametag(World world, Class<?> type) {
-        if(!NameTagGlassConfig.instance.fixSpawnRate) return 0;
-
-        int count = 0;
-        //noinspection unchecked
-        for(Entity ent : (Iterable<? extends Entity>) world.entities)
-            if(type.isInstance(ent) && hasNametag(ent))
-                ++count;
-        return count;
-    }
-
     public static boolean hasNametag(Entity entity) {
         return entity instanceof LivingEntity liv && liv.nametag_hasName();
     }
