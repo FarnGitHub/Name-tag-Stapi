@@ -13,6 +13,9 @@ public class NameTagGlassConfig {
         @ConfigEntry(name = "Consume Nametag", description = "Consume Nametag upon using on entity", multiplayerSynced = true)
         public Boolean consumeNameTag = false;
 
+        @ConfigEntry(name = "Fix Low Spawn rate", description = "Fix low spawn rate due to mob with nametag counting as part of the mob limit", multiplayerSynced = true)
+        public Boolean fixSpawnRate = true;
+
         @ConfigEntry(name="Stack Size", multiplayerSynced = true, requiresRestart = true, minValue = 1, maxValue = 64)
         public Integer stackSize = 64;
     }

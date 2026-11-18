@@ -6,7 +6,8 @@
   "mixins": [
     "common.LivingEntityMixin",
     "common.EntityMixin",
-    "common.CraftingRecipeManagerMixin"
+    "common.CraftingRecipeManagerMixin",
+    "common.NaturalSpawnerMixin"
   ],
   "client": [
     "client.LivingEntityRendererMixin"

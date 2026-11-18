@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin extends EntityMixin implements NameTagEntity {
+
+    @Shadow
+    protected int despawnCounter;
 
     @Inject(method="writeNbt", at = @At("HEAD"))
     public void nametag_write(NbtCompound nbt, CallbackInfo ci) {
@@ -31,7 +35,10 @@ public class LivingEntityMixin extends EntityMixin implements NameTagEntity {
 
     @Inject(method="tryDespawn", at = @At("HEAD"), cancellable = true)
     public void nametag_preventDespawn(CallbackInfo ci) {
-        if(nametag_hasName()) ci.cancel();
+        if(nametag_hasName()) {
+            this.despawnCounter = 0;
+            ci.cancel();
+        }
     }
 
     @Inject(method="<init>", at = @At("TAIL"))
